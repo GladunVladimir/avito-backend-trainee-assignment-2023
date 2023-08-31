@@ -9,7 +9,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	_ "github.com/jmoiron/sqlx"
 )
 
 var db *sql.DB
@@ -23,6 +22,13 @@ func main() {
 	}
 	defer db.Close()
 
+	r := Router()
+
+	log.Fatal(http.ListenAndServe(":8080", r))
+
+}
+
+func Router() *mux.Router {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/segment", CreateSegment).Methods("POST")
@@ -30,7 +36,7 @@ func main() {
 	router.HandleFunc("/user/segment/manage", ManageUserSegment).Methods("PUT", "DELETE")
 	router.HandleFunc("/user/segment", GetUsersSegments).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	return router
 }
 
 type Segment struct {
@@ -110,10 +116,6 @@ func ManageUserSegment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer r.Body.Close()
-
-	for i := 0; i < len(userSegment); i++ {
-
-	}
 
 	switch r.Method {
 	case "PUT":
