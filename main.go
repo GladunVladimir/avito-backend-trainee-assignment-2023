@@ -169,7 +169,7 @@ func ManageUserSegment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			count = 0
-			err = db.QueryRow("SELECT COUNT(*) FROM segments WHERE user_id = ?", userSegment[i].SegmentSlug).Scan(&count)
+			err = db.QueryRow("SELECT COUNT(*) FROM user_segments WHERE user_id = ?", userSegment[i].UserID).Scan(&count)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
