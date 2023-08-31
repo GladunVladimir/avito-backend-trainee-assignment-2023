@@ -7,7 +7,7 @@
 #
 # Хост: localhost (MySQL 5.7.43)
 # База данных: api-db
-# Время формирования: 2023-08-31 18:09:25 +0000
+# Время формирования: 2023-08-31 19:10:43 +0000
 # ************************************************************
 
 
@@ -18,28 +18,6 @@ SET NAMES utf8mb4;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE='NO_AUTO_VALUE_ON_ZERO', SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-# Дамп таблицы segments
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `segments`;
-
-CREATE TABLE `segments` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `slug` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-LOCK TABLES `segments` WRITE;
-/*!40000 ALTER TABLE `segments` DISABLE KEYS */;
-
-INSERT INTO `segments` (`id`, `slug`)
-VALUES
-	(1,'testtest');
-
-/*!40000 ALTER TABLE `segments` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Дамп таблицы user_segments

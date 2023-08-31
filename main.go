@@ -13,7 +13,6 @@ import (
 
 var db *sql.DB
 
-// конфиг логин и пароль
 func main() {
 	var err error
 	db, err = sql.Open("mysql", "user:123456@tcp(mysql:3306)/api-db")
@@ -25,7 +24,6 @@ func main() {
 	r := Router()
 
 	log.Fatal(http.ListenAndServe(":8080", r))
-
 }
 
 func Router() *mux.Router {
@@ -63,7 +61,6 @@ func CreateSegment(w http.ResponseWriter, r *http.Request) {
 	var count int
 
 	err = db.QueryRow("SELECT COUNT(*) FROM segments WHERE slug = ?", segment.Slug).Scan(&count)
-
 	if count != 0 {
 		http.Error(w, "Segment is already exists", http.StatusNotFound)
 		return
@@ -90,9 +87,7 @@ func DeleteSegment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var count int
-
 	err = db.QueryRow("SELECT COUNT(*) FROM segments WHERE slug = ?", segment.Slug).Scan(&count)
-
 	if count == 0 {
 		http.Error(w, "No such segment exists", http.StatusNotFound)
 		return
@@ -107,7 +102,6 @@ func DeleteSegment(w http.ResponseWriter, r *http.Request) {
 }
 
 func ManageUserSegment(w http.ResponseWriter, r *http.Request) {
-
 	var userSegment []UserSegment
 	err := json.NewDecoder(r.Body).Decode(&userSegment)
 	if err != nil {
@@ -168,6 +162,7 @@ func ManageUserSegment(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "Segment not found", http.StatusNotFound)
 				return
 			}
+
 			count = 0
 			err = db.QueryRow("SELECT COUNT(*) FROM user_segments WHERE user_id = ?", userSegment[i].UserID).Scan(&count)
 			if err != nil {
@@ -178,11 +173,13 @@ func ManageUserSegment(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "User not found", http.StatusNotFound)
 				return
 			}
+
 			err = db.QueryRow("SELECT ID FROM segments WHERE slug = ?", userSegment[i].SegmentSlug).Scan(&userSegment[i].SegmentID)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
+
 			_, err = db.Exec("DELETE FROM user_segments WHERE user_id = ? AND segment_id = ?", userSegment[i].UserID, userSegment[i].SegmentID)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -201,6 +198,8 @@ func GetUsersSegments(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	defer r.Body.Close()
+
 	var count int
 	err = db.QueryRow("SELECT COUNT(*) FROM user_segments WHERE user_id = ?", userSegment.UserID).Scan(&count)
 	if count == 0 {
